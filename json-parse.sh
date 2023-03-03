@@ -51,9 +51,16 @@ while [ $exit == "0" ]; do
 			value+=":"
 		fi
 		;;
-	",")
+	"," | "}")
 		if [ $in_key == false ] && [ $in_value == false ]; then
 			after_key=false
+			if [ "$last_char" != "\"" ]; then
+				output+="$(
+					IFS=_
+					echo "${var_name[*]}"
+				)=$value\n"
+				value=""
+			fi
 			unset "var_name[-1]"
 		fi
 		;;
@@ -62,11 +69,15 @@ while [ $exit == "0" ]; do
 			keyname+=$char
 		elif [ $in_value == true ]; then
 			value+=$char
+		elif [ $after_key == true ] && [[ $char =~ [0-9] ]]; then
+			value+=$char
 		fi
 		;;
 	esac
-	last_char=$char
+	if [ "$(echo -en "$char" | sed -E "s|\\S|match|g")" == "match" ]; then
+		last_char=$char
+	fi
 	i=$(("$i" + 1))
-	[ $((${#input} - 1)) == $i ] && exit=1
+	[ ${#input} == $i ] && exit=1
 done
 echo -en "$output"

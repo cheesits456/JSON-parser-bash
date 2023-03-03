@@ -2,5 +2,5 @@
 	"sample": "test",
 	"testWithColon": "this string: it has a colon",
 	"testWithQuote": "this string \" has a double quote",
-	"testing": "123"
+	"testing": 123
 }
