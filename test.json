@@ -1,6 +1,17 @@
 {
-	"sample": "test",
 	"testWithColon": "this string: it has a colon",
 	"testWithQuote": "this string \" has a double quote",
-	"testing": 123
+	"testing": 123,
+	"objectTest": {
+		"objectKey": "first value",
+		"anotherKey": "second value",
+		"objectNumber": 12345,
+		"nestedObject": {
+			"nestKey": "nested value",
+			"anotherNestedKey": "beep boop",
+			"numberForGoodLuck": 69
+		},
+		"backToFirstObject": "if this no werk imma screem"
+	},
+	"afterObject": "text"
 }

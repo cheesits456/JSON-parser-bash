@@ -53,15 +53,22 @@ while [ $exit == "0" ]; do
 		;;
 	"," | "}")
 		if [ $in_key == false ] && [ $in_value == false ]; then
-			after_key=false
-			if [ "$last_char" != "\"" ]; then
+			if [ "$last_char" != "\"" ] && [ $after_key == true ]; then
 				output+="$(
 					IFS=_
 					echo "${var_name[*]}"
 				)=$value\n"
 				value=""
 			fi
+			after_key=false
 			unset "var_name[-1]"
+		fi
+		;;
+	"{")
+		if [ $in_key == false ] && [ $in_value == false ]; then
+			if [ $after_key == true ]; then
+				after_key=false
+			fi
 		fi
 		;;
 	*)
