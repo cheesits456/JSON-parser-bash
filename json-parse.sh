@@ -18,11 +18,6 @@ last_char=""
 while [ $exit == "0" ]; do
 	char=${input:i:1}
 	case $char in
-	"{")
-		if [ $in_key == false ] && [ $in_value == false ]; then
-			level=$(("$level" + 1))
-		fi
-		;;
 	"\"")
 		if [ $in_key == true ]; then
 			in_key=false
