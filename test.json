@@ -1,17 +1,37 @@
 {
-	"testWithColon": "this string: it has a colon",
-	"testWithQuote": "this string \" has a double quote",
-	"testing": 123,
-	"objectTest": {
-		"objectKey": "first value",
-		"anotherKey": "second value",
-		"objectNumber": 12345,
-		"nestedObject": {
-			"nestKey": "nested value",
-			"anotherNestedKey": "beep boop",
-			"numberForGoodLuck": 69
-		},
-		"backToFirstObject": "if this no werk imma screem"
+	"id": "1081056853196296292",
+	"type": 0,
+	"content": "1\" 2: 3, 4} 5{ 6[ 7]",
+	"channel_id": "719188046809006142",
+	"author": {
+		"id": "739697358350057503",
+		"username": "SSH Bot",
+		"display_name": null,
+		"avatar": "fac5be6015240610d44ab269f49727d0",
+		"avatar_decoration": null,
+		"discriminator": "2953",
+		"public_flags": 0,
+		"bot": true
 	},
-	"afterObject": "text"
+	"attachments": [
+		{
+			"id": "1081056852961406986",
+			"filename": "text.txt",
+			"size": 121,
+			"url": "https://cdn.discordapp.com/attachments/719188046809006142/1081056852961406986/text.txt",
+			"proxy_url": "https://media.discordapp.net/attachments/719188046809006142/1081056852961406986/text.txt",
+			"content_type": "text/plain; charset=utf-8"
+		}
+	],
+	"embeds": [],
+	"mentions": [],
+	"mention_roles": [],
+	"pinned": false,
+	"mention_everyone": false,
+	"tts": false,
+	"timestamp": "2023-03-03T03:33:58.867000+00:00",
+	"edited_timestamp": null,
+	"flags": 0,
+	"components": [],
+	"referenced_message": null
 }
