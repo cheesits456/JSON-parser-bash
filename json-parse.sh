@@ -3,13 +3,15 @@
 input=$(cat "$1")
 output=""
 i=0
-
+line_break='
+'
 exit=0
 var_name=()
 level=0
 in_value=false
 in_key=false
 in_array=false
+in_object=false
 after_key=false
 array_index=0
 keyname=""
@@ -48,7 +50,7 @@ while [ $exit == "0" ]; do
 				after_key=true
 			fi
 		elif [ $in_value == true ]; then
-			value+=":"
+			value+="$char"
 		fi
 		;;
 	"," | "}")
@@ -60,15 +62,57 @@ while [ $exit == "0" ]; do
 				)=$value\n"
 				value=""
 			fi
-			after_key=false
 			unset "var_name[-1]"
+			if [ $in_array == true ] && [ $in_object == false ]; then
+				after_key=true
+				array_index=$((array_index + 1))
+				var_name+=("$array_index")
+			else
+				after_key=false
+			fi
+			if [ "$char" == "}" ] && [ $in_array == true ]; then
+				level=$((level - 1))
+				if [ $level == 0 ]; then
+					in_object=false
+					after_key=true
+				fi
+			fi
+		elif [ $in_value == true ]; then
+			value+="$char"
 		fi
 		;;
 	"{")
 		if [ $in_key == false ] && [ $in_value == false ]; then
 			if [ $after_key == true ]; then
 				after_key=false
+				in_object=true
+				if [ $in_array == true ]; then
+					level=$((level + 1))
+				fi
 			fi
+		elif [ $in_value == true ]; then
+			value+="$char"
+		fi
+		;;
+	"[")
+		if [ $in_key == false ] && [ $in_value == false ]; then
+			if [ $after_key == true ]; then
+				in_array=true
+				var_name+=("$array_index")
+			fi
+		elif [ $in_value == true ]; then
+			value+="$char"
+		fi
+		;;
+	"]")
+		if [ $in_key == false ] && [ $in_value == false ]; then
+			if [ $after_key == true ]; then
+				in_array=false
+				after_key=false
+				unset "var_name[-1]"
+			fi
+		elif [ $in_value == true ]; then
+			value+="$char"
 		fi
 		;;
 	*)
@@ -76,7 +120,7 @@ while [ $exit == "0" ]; do
 			keyname+=$char
 		elif [ $in_value == true ]; then
 			value+=$char
-		elif [ $after_key == true ] && [[ $char =~ [0-9] ]]; then
+		elif [ $after_key == true ] && [[ $char =~ [0-9aeflnrstu] ]]; then
 			value+=$char
 		fi
 		;;
@@ -87,4 +131,11 @@ while [ $exit == "0" ]; do
 	i=$(("$i" + 1))
 	[ ${#input} == $i ] && exit=1
 done
-echo -en "$output"
+filtered_output=""
+IFS=$'\n'
+for line in ${output//\\n/$line_break}; do
+	if [ "${line: -1}" != "=" ] && [ "${line: -4}" != "null" ]; then
+		filtered_output+="${line//\\\\/\\}$line_break"
+	fi
+done
+echo -n "$filtered_output"
